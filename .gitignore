@@ -1,0 +1,6 @@
+/target/
+__pycache__/
+*.py[cod]
+*.save
+*.save.[0-9]*
+.*.swp

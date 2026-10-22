@@ -1,0 +1,39 @@
+[package]
+name = "runo"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.82"
+description = "MIT/Runo — a Rust terminal text editor targeting GNU nano 8.2 compatibility"
+license = "MIT"
+repository = "https://github.com/JustLayen/runo"
+readme = "README.md"
+keywords = ["editor", "terminal", "nano", "text-editor"]
+categories = ["command-line-utilities", "text-editors"]
+include = [
+    "/src/**",
+    "/tests/pty_smoke.py",
+    "/scripts/*.py",
+    "/examples/runorc",
+    "/docs/**",
+    "/Cargo.toml",
+    "/Cargo.lock",
+    "/README*.md",
+    "/LICENSE",
+    "/LICENSE-AUDIT.md",
+    "/THIRD_PARTY_NOTICES.md",
+    "/CHANGELOG.md",
+    "/CONTRIBUTING.md",
+]
+
+[dependencies]
+crossterm = "0.28"
+regex = "1"
+unicode-width = "0.2"
+libc = "0.2"
+
+[[bin]]
+name = "runo"
+path = "src/main.rs"
+
+[profile.release]
+opt-level = 2

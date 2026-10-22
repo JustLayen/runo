@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: Linux / Rust ${{ matrix.rust }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        rust: [stable, '1.82.0']
+    env:
+      CARGO_TERM_COLOR: always
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: ${{ matrix.rust }}
+          components: rustfmt, clippy
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Fetch locked dependencies
+        run: cargo fetch --locked
+      - name: Check dependency licenses
+        run: python3 scripts/audit_licenses.py
+      - name: Check formatting
+        if: matrix.rust == 'stable'
+        run: cargo fmt --check
+      - name: Clippy
+        if: matrix.rust == 'stable'
+        run: cargo clippy --offline --locked --all-targets -- -D warnings
+      - name: Unit tests
+        run: cargo test --offline --locked
+      - name: Release build
+        run: cargo build --release --offline --locked --target x86_64-unknown-linux-gnu
+      - name: Pseudo-terminal integration tests
+        run: python3 tests/pty_smoke.py target/x86_64-unknown-linux-gnu/release/runo
+      - name: Verify source package
+        if: matrix.rust == 'stable'
+        run: cargo package --offline --locked
+      - name: Package binary and notices
+        if: matrix.rust == 'stable'
+        run: python3 scripts/package_release.py
+      - name: Upload binary bundle
+        if: matrix.rust == 'stable'
+        uses: actions/upload-artifact@v4
+        with:
+          name: runo-x86_64-unknown-linux-gnu
+          path: target/dist/*
+          if-no-files-found: error

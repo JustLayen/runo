@@ -1,0 +1,18 @@
+## Optional configuration; run with: runo -f examples/runorc FILE
+set linenumbers
+set softwrap
+set autoindent
+set tabsize 4
+set tabstospaces
+set historylog
+set positionlog
+
+## Optional: enable if your system provides nano syntax definitions.
+# include /usr/share/nano/*.nanorc
+
+## A separate key can expand into several commands.
+# bind M-Q "{savefile}{exit}" main
+
+## Restore pre-nano-8 Ctrl+F / Ctrl+B cursor movement if preferred.
+# bind ^F forward main
+# bind ^B back main
