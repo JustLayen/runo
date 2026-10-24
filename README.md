@@ -153,6 +153,11 @@ stable Rust and tests the minimum supported Rust version. See
 [CONTRIBUTING.md](CONTRIBUTING.md) for reporting bugs and making changes,
 and [the release guide](docs/releasing.md) for preparing an archive.
 
+Runo was developed using an AI-assisted clean-room workflow: code generation 
+was driven by behavioral specifications of GNU nano 8.2 and strictly validated 
+against automated PTY smoke suites, randomized property tests, and zero-warning 
+Clippy checks.
+
 ## License and acknowledgements
 
 Runo is distributed under the [MIT License](LICENSE). It is an independent 
